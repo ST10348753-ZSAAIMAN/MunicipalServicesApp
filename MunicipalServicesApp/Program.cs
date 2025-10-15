@@ -7,7 +7,7 @@ using MunicipalServicesApp.Models;
 namespace MunicipalServicesApp
 {
     /// <summary>
-    /// Application entry point.
+    /// Application entry point
     /// </summary>
     internal static class Program
     {
