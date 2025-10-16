@@ -6,10 +6,7 @@ namespace MunicipalServicesApp.Views
 {
     /// <summary>
     /// Main Menu form (code-only layout).
-    /// Part 2 requirements:
-    ///  - Report Issues: enabled (opens ReportIssuesForm).
-    ///  - Local Events & Announcements: enabled (opens EventsForm).
-    ///  - Service Request Status: disabled (reserved for Part 3).
+    /// Part 2: enables the Local Events & Announcements button.
     /// </summary>
     public class MainMenuForm : Form
     {
