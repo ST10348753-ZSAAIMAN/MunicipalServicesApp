@@ -140,6 +140,7 @@ namespace MunicipalServicesApp.Views
                 Size = new Size(90, 28),
                 TabIndex = 8
             };
+            this.AcceptButton = btnSearch;
 
             // --- Events list (ListView in Details mode) ---
             lvEvents = new ListView
@@ -158,6 +159,9 @@ namespace MunicipalServicesApp.Views
             colLocation = new ColumnHeader { Text = "Location", Width = 150 };
             colPriority = new ColumnHeader { Text = "Priority", Width = 80 };
             lvEvents.Columns.AddRange(new[] { colTitle, colCategory, colDate, colLocation, colPriority });
+
+            lvEvents.MultiSelect = false;
+            lvEvents.HeaderStyle = ColumnHeaderStyle.Clickable;
 
             // --- Recommendations panel ---
             grpRecommendations = new GroupBox
@@ -306,11 +310,10 @@ namespace MunicipalServicesApp.Views
         /// </summary>
         private void RefreshResultsAndRecommendations()
         {
-            var category = (cmbCategory.SelectedItem ?? "").ToString();
+            var rawCat = (cmbCategory.SelectedItem ?? "").ToString();
+            var category = string.IsNullOrWhiteSpace(rawCat) ? null : rawCat;
             var from = dtpFrom.Value.Date;
             var to = dtpTo.Value.Date;
-
-            // Inclusive range guard: if user sets To < From, clamp To to From
             if (to < from) to = from;
 
             // Filter via repository (search + category + date range)
