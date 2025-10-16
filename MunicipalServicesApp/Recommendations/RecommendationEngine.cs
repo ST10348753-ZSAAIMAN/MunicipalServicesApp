@@ -48,7 +48,7 @@ namespace MunicipalServicesApp.Recommendations
                 }
                 score += jaccard * 4.0;
 
-                // 3) Recency boost for events within next 90 days
+                // 3) Recency
                 var daysAhead = (e.Date.Date - today).TotalDays;
                 if (daysAhead >= 0 && daysAhead <= 90)
                 {
@@ -56,7 +56,7 @@ namespace MunicipalServicesApp.Recommendations
                     score += rec * 3.0;
                 }
 
-                // 4) Priority weight
+                // 4) Priority 
                 score += (e.Priority == 0 ? 3 : (e.Priority == 1 ? 2 : 1));
 
                 return score;

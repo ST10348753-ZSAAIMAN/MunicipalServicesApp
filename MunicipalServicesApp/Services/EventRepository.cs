@@ -164,7 +164,7 @@ namespace MunicipalServicesApp.Services
             if (!string.IsNullOrWhiteSpace(e.Category))
                 _allCategories.Add(e.Category);
 
-            // Recent FIFO
+            // Recent added queue
             _recentQueue.Enqueue(e);
 
             // Priority buckets
