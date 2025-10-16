@@ -11,18 +11,7 @@ using MunicipalServicesApp.Recommendations;
 namespace MunicipalServicesApp.Views
 {
     /// <summary>
-    /// EventsForm (code-only)
-    /// Implements Part 2 controls and event wiring:
-    ///   Search area 
-    ///   Events list 
-    ///   Recommendations panel
-    ///   Navigation 
-    /// Event handlers: btnSearch_Click, cmbCategory_SelectedIndexChanged,
-    ///                 dtpFrom_ValueChanged, dtpTo_ValueChanged,
-    ///                 lvEvents_DoubleClick, btnBack_Click.
-    /// 
-    /// NOTE: This form expects EventRepository/RecommendationEngine in your project
-    /// for data-binding. If you haven't added them yet, add them after pasting this.
+    /// Implements Part 2 controls and event wiring.
     /// </summary>
     public class EventsForm : Form
     {
@@ -96,7 +85,7 @@ namespace MunicipalServicesApp.Views
                 Name = "cmbCategory",
                 Location = new Point(410, 17),
                 Size = new Size(160, 24),
-                DropDownStyle = ComboBoxStyle.DropDownList, // REQUIRED
+                DropDownStyle = ComboBoxStyle.DropDownList, 
                 TabIndex = 3
             };
 
@@ -142,7 +131,7 @@ namespace MunicipalServicesApp.Views
             };
             this.AcceptButton = btnSearch;
 
-            // --- Events list (ListView in Details mode) ---
+            // --- Events list ---
             lvEvents = new ListView
             {
                 Name = "lvEvents",
@@ -201,7 +190,7 @@ namespace MunicipalServicesApp.Views
         }
 
         /// <summary>
-        /// Wire up all events exactly as required.
+        /// Wire up all events.
         /// </summary>
         private void WireEvents()
         {
@@ -211,7 +200,7 @@ namespace MunicipalServicesApp.Views
             // Category change triggers refresh
             cmbCategory.SelectedIndexChanged += cmbCategory_SelectedIndexChanged;
 
-            // Either date change triggers refresh (inclusive range)
+            // Either date change triggers refresh 
             dtpFrom.ValueChanged += dtpFrom_ValueChanged;
             dtpTo.ValueChanged += dtpTo_ValueChanged;
 
@@ -232,7 +221,7 @@ namespace MunicipalServicesApp.Views
                 // Ensure demo data is available
                 _repo.Seed();
 
-                // Populate categories ("" means All)
+                // Populate categories 
                 cmbCategory.Items.Clear();
                 cmbCategory.Items.Add("");
                 foreach (var cat in _repo.GetAllCategories())
@@ -258,7 +247,7 @@ namespace MunicipalServicesApp.Views
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            // Record search to analytics (Stack history + term frequency)
+            // Record search to analytics 
             _analytics.LogSearch(txtSearch.Text);
             RefreshResultsAndRecommendations();
         }
@@ -298,14 +287,12 @@ namespace MunicipalServicesApp.Views
             this.Close(); // Return to Main Menu (dialog closes)
         }
 
-        // =======================
+        // ===============================
         // Helper: Refresh results + recs
-        // =======================
+        // ===============================
 
         /// <summary>
-        /// Re-runs the search pipeline and repopulates:
-        ///   - lvEvents (filtered results)
-        ///   - lstRecommended (top N recommendations)
+        /// Re-runs the search pipeline 
         /// Ensures date range is inclusive (from <= date <= to).
         /// </summary>
         private void RefreshResultsAndRecommendations()
@@ -316,7 +303,7 @@ namespace MunicipalServicesApp.Views
             var to = dtpTo.Value.Date;
             if (to < from) to = from;
 
-            // Filter via repository (search + category + date range)
+            // Filter via repository
             var results = _repo.Search(txtSearch.Text, category, from, to).ToList();
 
             // Fill ListView
@@ -325,7 +312,7 @@ namespace MunicipalServicesApp.Views
 
             if (results.Count == 0)
             {
-                // Friendly "no results" row
+                // "no results" row
                 lvEvents.Items.Add(new ListViewItem(new[] { "No events found", "", "", "", "" }));
             }
             else

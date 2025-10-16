@@ -8,11 +8,6 @@ namespace MunicipalServicesApp.Recommendations
     /// <summary>
     /// Lightweight recommendation engine.
     /// Score(event) = termMatch + 4*Jaccard + 3*recency + priorityWeight
-    /// where:
-    ///   termMatch: +2 per token matched in title/desc/tags
-    ///   Jaccard: overlap between tokens and (tags ∪ {category})
-    ///   recency: (90 - daysAhead)/90 (clamped 0..1), scaled by 3
-    ///   priorityWeight: High=+3, Medium=+2, Low=+1
     /// </summary>
     public static class RecommendationEngine
     {
@@ -39,7 +34,7 @@ namespace MunicipalServicesApp.Recommendations
                         if (hay.Contains(t)) score += 2.0;
                 }
 
-                // 2) Category/Tag Jaccard overlap
+                // 2) Category overlap
                 var tokenSet = new HashSet<string>(tokens, StringComparer.OrdinalIgnoreCase);
                 var catSet = new HashSet<string>(e.Tags, StringComparer.OrdinalIgnoreCase);
                 if (!string.IsNullOrWhiteSpace(e.Category)) catSet.Add(e.Category);
@@ -61,7 +56,7 @@ namespace MunicipalServicesApp.Recommendations
                     score += rec * 3.0;
                 }
 
-                // 4) Priority weight (High>Medium>Low)
+                // 4) Priority weight
                 score += (e.Priority == 0 ? 3 : (e.Priority == 1 ? 2 : 1));
 
                 return score;

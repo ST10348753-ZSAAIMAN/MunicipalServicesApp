@@ -14,7 +14,6 @@ namespace MunicipalServicesApp.Utilities
         {
             if (string.IsNullOrWhiteSpace(path) || maxDepth < 0) return false;
 
-            // Treat non-existent directory as "safe".
             if (!Directory.Exists(path)) return true;
 
             try
@@ -23,7 +22,6 @@ namespace MunicipalServicesApp.Utilities
             }
             catch
             {
-                // Any IO/permission error => fail safely.
                 return false;
             }
         }

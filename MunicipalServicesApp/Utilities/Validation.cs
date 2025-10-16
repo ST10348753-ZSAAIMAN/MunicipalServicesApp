@@ -5,7 +5,7 @@ using System.Linq;
 namespace MunicipalServicesApp.Utilities
 {
     /// <summary>
-    /// Lightweight validation helpers.
+    /// Validation helpers.
     /// </summary>
     public static class Validation
     {

@@ -8,19 +8,13 @@ namespace MunicipalServicesApp.Services
 {
     /// <summary>
     /// Repository for Local Events & Announcements.
-    /// Demonstrates required data structures (LU1–LU4):
-    ///   - SortedDictionary<DateTime, List<EventItem>>  -> chronological storage & date-range queries
-    ///   - Dictionary<string, List<EventItem>>          -> category index for O(1) lookups
-    ///   - HashSet<string>                              -> unique categories for UI filter
-    ///   - Queue<EventItem>                             -> "recently added" FIFO
-    ///   - SortedDictionary<int, Queue<EventItem>>      -> priority buckets (0=High,1=Medium,2=Low)
     /// </summary>
     public sealed class EventRepository
     {
         private static readonly EventRepository _instance = new EventRepository();
         public static EventRepository Instance => _instance;
 
-        // Primary chronological store (keyed by date) for fast range iteration:
+        // Primary chronological store (keyed by date):
         private readonly SortedDictionary<DateTime, List<EventItem>> _byDate =
             new SortedDictionary<DateTime, List<EventItem>>();
 
@@ -32,14 +26,14 @@ namespace MunicipalServicesApp.Services
         private readonly HashSet<string> _allCategories =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // Recently added queue (demonstrates FIFO behaviour):
+        // Recently added queue:
         private readonly Queue<EventItem> _recentQueue = new Queue<EventItem>();
 
         // Priority buckets: 0 (High), 1 (Medium), 2 (Low)
         private readonly SortedDictionary<int, Queue<EventItem>> _priorityBuckets =
             new SortedDictionary<int, Queue<EventItem>>();
 
-        // Convenience: flat list of all events
+        // Conveniences
         private readonly List<EventItem> _all = new List<EventItem>();
 
         private EventRepository()
@@ -51,7 +45,7 @@ namespace MunicipalServicesApp.Services
         }
 
         /// <summary>
-        /// Seed a representative set of South African context events (idempotent).
+        /// Seed a representative set of South African context events.
         /// </summary>
         public void Seed()
         {
@@ -139,7 +133,7 @@ namespace MunicipalServicesApp.Services
         }
 
         /// <summary>
-        /// Adds an event into all data structures (keeps indexes in sync).
+        /// Adds an event into all data structures.
         /// </summary>
         public void Add(EventItem e)
         {
@@ -194,7 +188,7 @@ namespace MunicipalServicesApp.Services
 
         /// <summary>
         /// Inclusive date range over the chronological index.
-        /// Iterates only the keys in range (efficient with SortedDictionary).
+        /// Iterates only the keys in range.
         /// </summary>
         public IEnumerable<EventItem> GetInDateRange(DateTime fromInclusive, DateTime toInclusive)
         {
@@ -206,7 +200,7 @@ namespace MunicipalServicesApp.Services
             }
         }
 
-        /// <summary>Quick lookup by category via dictionary index.</summary>
+        /// <summary>Quick lookup by category.</summary>
         public IEnumerable<EventItem> GetByCategory(string category)
         {
             if (string.IsNullOrWhiteSpace(category)) return _all;
@@ -214,7 +208,7 @@ namespace MunicipalServicesApp.Services
         }
 
         /// <summary>
-        /// Combined search using text tokens (+ optional category + date range).
+        /// Combined search using text tokens.
         /// </summary>
         public IEnumerable<EventItem> Search(string query, string category, DateTime fromInclusive, DateTime toInclusive)
         {
@@ -223,7 +217,7 @@ namespace MunicipalServicesApp.Services
             // Start with the date range to reduce set size early:
             var pool = GetInDateRange(fromInclusive, toInclusive);
 
-            // Narrow by category if supplied:
+            // Narrow by category:
             if (!string.IsNullOrWhiteSpace(category))
                 pool = pool.Where(e => string.Equals(e.Category, category, StringComparison.OrdinalIgnoreCase));
 
@@ -241,7 +235,7 @@ namespace MunicipalServicesApp.Services
 
         /// <summary>
         /// Returns items in priority order (High → Medium → Low), up to max.
-        /// Dequeues from buckets (demonstrates priority handling).
+        /// Dequeues from buckets.
         /// </summary>
         public IEnumerable<EventItem> DequeueUrgentOrder(int max)
         {

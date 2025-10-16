@@ -6,10 +6,7 @@ using System.Text.RegularExpressions;
 namespace MunicipalServicesApp.Services
 {
     /// <summary>
-    /// Records search behaviour for recommendations:
-    ///   - Stack<string>     search history (LIFO)
-    ///   - Dictionary<T,int> term frequency
-    ///   - HashSet<string>   distinct token set
+    /// Records search behaviour for recommendations.
     /// Tokenization is case-insensitive and alphanumeric.
     /// </summary>
     public sealed class SearchAnalyticsService
@@ -37,7 +34,7 @@ namespace MunicipalServicesApp.Services
             }
         }
 
-        /// <summary>Pops the last search (if any). Frequencies are kept as “interest memory”.</summary>
+        /// <summary>Pops the last search (if any).</summary>
         public bool UndoLastSearch(out string removed)
         {
             if (_searchHistory.Count > 0)
@@ -49,7 +46,7 @@ namespace MunicipalServicesApp.Services
             return false;
         }
 
-        /// <summary>Returns top N terms by frequency (for debugging/evidence).</summary>
+        /// <summary>Returns top N terms by frequency.</summary>
         public IEnumerable<KeyValuePair<string, int>> TopTerms(int n) =>
             _termFrequency.OrderByDescending(kv => kv.Value).Take(n);
 

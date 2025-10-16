@@ -6,7 +6,7 @@ namespace MunicipalServicesApp.Utilities
     public static class CultureInit
     {
         /// <summary>
-        /// Sets the process/UI culture for consistent SA formatting.
+        /// Sets the UI for consistent SA formatting.
         /// </summary>
         public static void SetCulture(string cultureName)
         {

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace MunicipalServicesApp.Views
 {
     /// <summary>
-    /// Main Menu form (code-only layout).
+    /// Main Menu form.
     /// Part 2: enables the Local Events & Announcements button.
     /// </summary>
     public class MainMenuForm : Form

@@ -5,7 +5,6 @@ namespace MunicipalServicesApp.Services
 {
     /// <summary>
     /// In-memory repository for IssueItem.
-    /// Demonstrates List<T>, IEnumerable<T>, and method overloading.
     /// </summary>
     public sealed class IssueRepository
     {
