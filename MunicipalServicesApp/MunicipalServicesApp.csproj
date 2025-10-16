@@ -58,6 +58,9 @@
     <Compile Include="Utilities\EngagementMessages.cs" />
     <Compile Include="Utilities\FileGuards.cs" />
     <Compile Include="Utilities\Validation.cs" />
+    <Compile Include="Views\EventsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Views\MainMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -5,11 +5,17 @@ using System.Windows.Forms;
 namespace MunicipalServicesApp.Views
 {
     /// <summary>
-    /// Startup menu with three tasks (two disabled for Part 1).
-    /// Designed code-only: no Designer files.
+    /// Main Menu form (code-only layout).
+    /// Part 2 requirements:
+    ///  - Report Issues: enabled (opens ReportIssuesForm).
+    ///  - Local Events & Announcements: enabled (opens EventsForm).
+    ///  - Service Request Status: disabled (reserved for Part 3).
     /// </summary>
     public class MainMenuForm : Form
     {
+        /// <summary>
+        /// Buttons for the three main features.
+        /// </summary>
         private Button btnReportIssues;
         private Button btnEvents;
         private Button btnServiceStatus;
@@ -20,7 +26,7 @@ namespace MunicipalServicesApp.Views
         }
 
         /// <summary>
-        /// Builds the entire UI tree in code (Designer-free).
+        /// Builds entire UI Designer-free.
         /// </summary>
         private void InitializeComponent()
         {
@@ -33,7 +39,7 @@ namespace MunicipalServicesApp.Views
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
-            // Report Issues (enabled for Part 1)
+            // Report Issues (ENABLED) — Part 1 feature
             btnReportIssues = new Button
             {
                 Name = "btnReportIssues",
@@ -44,22 +50,30 @@ namespace MunicipalServicesApp.Views
             };
             btnReportIssues.Click += BtnReportIssues_Click;
 
-            // Local Events & Announcements (placeholder, disabled in Part 1)
+            // Local Events & Announcements (ENABLED) — Part 2 feature.
+            // Use & for access key and && to render a literal '&'
             btnEvents = new Button
             {
                 Name = "btnEvents",
-                Text = "Local Events & Announcements (Part 2)",
+                Text = "&Local Events && Announcements",
                 Location = new Point(40, 100),
                 Size = new Size(320, 40),
                 TabIndex = 1,
-                Enabled = false
+                Enabled = true // enabled for Part 2
+            };
+            btnEvents.Click += (s, e) =>
+            {
+                using (var form = new EventsForm())
+                {
+                    form.ShowDialog(this); // modal: returns to menu after closing
+                }
             };
 
-            // Service Request Status (placeholder, disabled in Part 1)
+            // Service Request Status (DISABLED) — Part 3
             btnServiceStatus = new Button
             {
                 Name = "btnServiceStatus",
-                Text = "Service Request Status (Part 2)",
+                Text = "Service Request Status (Part 3)",
                 Location = new Point(40, 160),
                 Size = new Size(320, 40),
                 TabIndex = 2,
