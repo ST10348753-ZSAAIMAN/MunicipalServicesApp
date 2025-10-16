@@ -53,6 +53,7 @@
     <Compile Include="Models\IssueItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recommendations\RecommendationEngine.cs" />
     <Compile Include="Services\EventRepository.cs" />
     <Compile Include="Services\IssueRepository.cs" />
     <Compile Include="Services\MediaService.cs" />
@@ -92,8 +93,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Recommendations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
