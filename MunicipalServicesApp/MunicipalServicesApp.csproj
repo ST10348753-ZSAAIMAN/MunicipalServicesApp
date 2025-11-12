@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Models\EventItem.cs" />
     <Compile Include="Models\IssueItem.cs" />
+    <Compile Include="Models\ServiceRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recommendations\RecommendationEngine.cs" />
@@ -58,6 +59,15 @@
     <Compile Include="Services\IssueRepository.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\SearchAnalyticsService.cs" />
+    <Compile Include="Services\ServiceRequestRepository.cs" />
+    <Compile Include="Structures\Graphs\Graph.cs" />
+    <Compile Include="Structures\Graphs\MinimumSpanningTree.cs" />
+    <Compile Include="Structures\Heaps\MaxBinaryHeap.cs" />
+    <Compile Include="Structures\Trees\AvlTree.cs" />
+    <Compile Include="Structures\Trees\BasicTree.cs" />
+    <Compile Include="Structures\Trees\BinarySearchTree.cs" />
+    <Compile Include="Structures\Trees\BinaryTree.cs" />
+    <Compile Include="Structures\Trees\RedBlackTree.cs" />
     <Compile Include="Utilities\CultureInit.cs" />
     <Compile Include="Utilities\EngagementMessages.cs" />
     <Compile Include="Utilities\FileGuards.cs" />
