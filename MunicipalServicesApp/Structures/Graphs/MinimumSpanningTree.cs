@@ -1,42 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MunicipalServicesApp.Structures.Graphs
 {
     /// <summary>
     /// Prim's algorithm for MST on a weighted undirected Graph.
+    /// Framework-safe tuple access via Item1/Item2/Item3.
     /// </summary>
     public static class MinimumSpanningTree
     {
-        public static (List<(int u, int v, double w)> edges, double total) Prim(Graph g, int start = 0)
+        // Returns: edges = list of (u,v,w), total = sum of weights
+        public static (List<(int, int, double)> edges, double total) Prim(Graph g, int start = 0)
         {
             int n = g.VertexCount;
             var used = new bool[n];
-            var res = new List<(int, int, double)>();
+            var resultEdges = new List<(int, int, double)>();
             double total = 0;
 
-            // min-heap of (w,u,v)
-            var pq = new SortedSet<(double w, int u, int v)>(Comparer<(double, int, int)>.Create(
-                (a, b) => a.w != b.w ? a.w.CompareTo(b.w) : (a.u != b.u ? a.u.CompareTo(b.u) : a.v.CompareTo(b.v))));
+            // Min-heap (simulated with SortedSet) of (w,u,v)
+            var pq = new SortedSet<(double, int, int)>(
+                Comparer<(double, int, int)>.Create((a, b) =>
+                {
+                    // Compare by weight, then u, then v
+                    if (a.Item1 != b.Item1) return a.Item1.CompareTo(b.Item1);
+                    if (a.Item2 != b.Item2) return a.Item2.CompareTo(b.Item2);
+                    return a.Item3.CompareTo(b.Item3);
+                })
+            );
 
-            void add(int u)
+            void AddFrontier(int u)
             {
                 used[u] = true;
                 foreach (var e in g.Neighbours(u))
-                    if (!used[e.To]) pq.Add((e.W, u, e.To));
+                {
+                    if (!used[e.To])
+                    {
+                        // (w, u, v)
+                        pq.Add((e.W, u, e.To));
+                    }
+                }
             }
 
-            add(start);
-            while (pq.Count > 0 && res.Count < n - 1)
+            AddFrontier(start);
+
+            while (pq.Count > 0 && resultEdges.Count < n - 1)
             {
-                var best = pq.Min; pq.Remove(best);
-                if (used[best.v]) continue;
-                res.Add((best.u, best.v, best.w)); total += best.w;
-                add(best.v);
+                var best = pq.Min;          // (w,u,v)
+                pq.Remove(best);
+
+                int v = best.Item3;
+                if (used[v]) continue;
+
+                int u = best.Item2;
+                double w = best.Item1;
+
+                resultEdges.Add((u, v, w));
+                total += w;
+                AddFrontier(v);
             }
 
-            return (res, total);
+            return (resultEdges, total);
         }
     }
 }
