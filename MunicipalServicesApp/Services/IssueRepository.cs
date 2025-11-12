@@ -8,7 +8,6 @@ namespace MunicipalServicesApp.Services
     /// </summary>
     public sealed class IssueRepository
     {
-        // Singleton instance keeps one authoritative in-memory store across forms.
         private static readonly IssueRepository _instance = new IssueRepository();
         public static IssueRepository Instance => _instance;
 

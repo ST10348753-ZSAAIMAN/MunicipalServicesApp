@@ -3,13 +3,8 @@ using System.Collections.Generic;
 
 namespace MunicipalServicesApp.Structures.Graphs
 {
-    /// <summary>
-    /// Prim's algorithm for MST on a weighted undirected Graph.
-    /// Framework-safe tuple access via Item1/Item2/Item3.
-    /// </summary>
     public static class MinimumSpanningTree
     {
-        // Returns: edges = list of (u,v,w), total = sum of weights
         public static (List<(int, int, double)> edges, double total) Prim(Graph g, int start = 0)
         {
             int n = g.VertexCount;
@@ -17,7 +12,7 @@ namespace MunicipalServicesApp.Structures.Graphs
             var resultEdges = new List<(int, int, double)>();
             double total = 0;
 
-            // Min-heap (simulated with SortedSet) of (w,u,v)
+            // Min-heap (simulated with SortedSet) 
             var pq = new SortedSet<(double, int, int)>(
                 Comparer<(double, int, int)>.Create((a, b) =>
                 {
@@ -35,7 +30,7 @@ namespace MunicipalServicesApp.Structures.Graphs
                 {
                     if (!used[e.To])
                     {
-                        // (w, u, v)
+                       
                         pq.Add((e.W, u, e.To));
                     }
                 }
@@ -45,7 +40,7 @@ namespace MunicipalServicesApp.Structures.Graphs
 
             while (pq.Count > 0 && resultEdges.Count < n - 1)
             {
-                var best = pq.Min;          // (w,u,v)
+                var best = pq.Min;         
                 pq.Remove(best);
 
                 int v = best.Item3;

@@ -4,9 +4,6 @@ using System.Windows.Forms;
 
 namespace MunicipalServicesApp.Services
 {
-    /// <summary>
-    /// Centralised wrapper for OpenFileDialog with validation.
-    /// </summary>
     public static class MediaService
     {
         // Whitelisted extensions. Validation is kept simple and local.
@@ -54,7 +51,6 @@ namespace MunicipalServicesApp.Services
                         return false;
                     }
 
-                    // Return the chosen path.
                     path = ofd.FileName;
                     return true;
                 }

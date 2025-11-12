@@ -2,9 +2,6 @@
 
 namespace MunicipalServicesApp.Models
 {
-    /// <summary>
-    /// Domain model representing a reported municipal issue.
-    /// </summary>
     public class IssueItem
     {
         /// <summary>

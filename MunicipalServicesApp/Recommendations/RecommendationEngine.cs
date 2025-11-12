@@ -5,10 +5,6 @@ using MunicipalServicesApp.Models;
 
 namespace MunicipalServicesApp.Recommendations
 {
-    /// <summary>
-    /// Lightweight recommendation engine.
-    /// Score(event) = termMatch + 4*Jaccard + 3*recency + priorityWeight
-    /// </summary>
     public static class RecommendationEngine
     {
         public static IEnumerable<EventItem> Recommend(
@@ -52,7 +48,7 @@ namespace MunicipalServicesApp.Recommendations
                 var daysAhead = (e.Date.Date - today).TotalDays;
                 if (daysAhead >= 0 && daysAhead <= 90)
                 {
-                    var rec = (90 - daysAhead) / 90.0; // nearer date -> larger rec
+                    var rec = (90 - daysAhead) / 90.0; 
                     score += rec * 3.0;
                 }
 
@@ -64,7 +60,7 @@ namespace MunicipalServicesApp.Recommendations
 
             return candidatePool
                 .OrderByDescending(Score)
-                .ThenBy(e => e.Date) // tie-breaker: earlier event first
+                .ThenBy(e => e.Date) 
                 .Take(Math.Max(0, maxResults))
                 .ToList();
         }

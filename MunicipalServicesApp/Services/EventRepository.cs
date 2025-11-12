@@ -14,26 +14,20 @@ namespace MunicipalServicesApp.Services
         private static readonly EventRepository _instance = new EventRepository();
         public static EventRepository Instance => _instance;
 
-        // Primary chronological store (keyed by date):
         private readonly SortedDictionary<DateTime, List<EventItem>> _byDate =
             new SortedDictionary<DateTime, List<EventItem>>();
 
-        // Category -> events
         private readonly Dictionary<string, List<EventItem>> _byCategory =
             new Dictionary<string, List<EventItem>>(StringComparer.OrdinalIgnoreCase);
 
-        // Set of all unique categories for the filter ComboBox:
         private readonly HashSet<string> _allCategories =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // Recently added queue:
         private readonly Queue<EventItem> _recentQueue = new Queue<EventItem>();
 
-        // Priority buckets: 0 (High), 1 (Medium), 2 (Low)
         private readonly SortedDictionary<int, Queue<EventItem>> _priorityBuckets =
             new SortedDictionary<int, Queue<EventItem>>();
 
-        // Conveniences
         private readonly List<EventItem> _all = new List<EventItem>();
 
         private EventRepository()
@@ -44,12 +38,10 @@ namespace MunicipalServicesApp.Services
             _priorityBuckets[2] = new Queue<EventItem>();
         }
 
-        /// <summary>
-        /// Seed a representative set of South African context events.
-        /// </summary>
+
         public void Seed()
         {
-            if (_all.Count > 0) return; // already seeded
+            if (_all.Count > 0) return; 
 
             var today = DateTime.Today;
 
@@ -139,10 +131,8 @@ namespace MunicipalServicesApp.Services
         {
             if (e == null) return;
 
-            // Flat list
             _all.Add(e);
 
-            // Chronological index
             var dateKey = e.Date.Date;
             if (!_byDate.TryGetValue(dateKey, out var dateList))
             {
@@ -151,7 +141,6 @@ namespace MunicipalServicesApp.Services
             }
             dateList.Add(e);
 
-            // Category index
             var catKey = e.Category ?? string.Empty;
             if (!_byCategory.TryGetValue(catKey, out var catList))
             {
@@ -160,7 +149,6 @@ namespace MunicipalServicesApp.Services
             }
             catList.Add(e);
 
-            // Unique categories set
             if (!string.IsNullOrWhiteSpace(e.Category))
                 _allCategories.Add(e.Category);
 
@@ -176,10 +164,8 @@ namespace MunicipalServicesApp.Services
             pq.Enqueue(e);
         }
 
-        /// <summary>Returns all events (unsorted).</summary>
         public IEnumerable<EventItem> GetAll() => _all;
 
-        /// <summary>Unique categories sorted by local culture for display.</summary>
         public IEnumerable<string> GetAllCategories()
         {
             var za = new CultureInfo("en-ZA");
@@ -200,7 +186,6 @@ namespace MunicipalServicesApp.Services
             }
         }
 
-        /// <summary>Quick lookup by category.</summary>
         public IEnumerable<EventItem> GetByCategory(string category)
         {
             if (string.IsNullOrWhiteSpace(category)) return _all;
@@ -214,18 +199,14 @@ namespace MunicipalServicesApp.Services
         {
             var tokens = SearchAnalyticsService.Tokenize(query).ToList();
 
-            // Start with the date range to reduce set size early:
             var pool = GetInDateRange(fromInclusive, toInclusive);
 
-            // Narrow by category:
             if (!string.IsNullOrWhiteSpace(category))
                 pool = pool.Where(e => string.Equals(e.Category, category, StringComparison.OrdinalIgnoreCase));
 
-            // If no tokens, return filtered list as-is:
             if (tokens.Count == 0)
                 return pool.ToList();
 
-            // Token match against title/description/tags:
             return pool.Where(e =>
             {
                 var hay = $"{e.Title} {e.Description} {string.Join(" ", e.Tags)}".ToLowerInvariant();
@@ -233,10 +214,6 @@ namespace MunicipalServicesApp.Services
             }).ToList();
         }
 
-        /// <summary>
-        /// Returns items in priority order (High → Medium → Low), up to max.
-        /// Dequeues from buckets.
-        /// </summary>
         public IEnumerable<EventItem> DequeueUrgentOrder(int max)
         {
             var result = new List<EventItem>(max);

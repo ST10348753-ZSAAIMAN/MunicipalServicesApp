@@ -9,14 +9,6 @@ using MunicipalServicesApp.Structures.Graphs;
 
 namespace MunicipalServicesApp.Services
 {
-    /// <summary>
-    /// Central store + indices for Service Requests.
-    /// Integrates custom DS required by POE:
-    /// - BST (ticket), AVL (created ticks), RBT (location string)
-    /// - MaxHeap (priority)
-    /// - BasicTree (category taxonomy), BinaryTree (status demo traversal)
-    /// - Graph + MST (depots network) with BFS/DFS
-    /// </summary>
     public sealed class ServiceRequestRepository
     {
         private static readonly ServiceRequestRepository _instance = new ServiceRequestRepository();
@@ -33,15 +25,13 @@ namespace MunicipalServicesApp.Services
         private readonly MaxBinaryHeap<ServiceRequest> _urgentHeap =
             new MaxBinaryHeap<ServiceRequest>(Comparer<ServiceRequest>.Create((a, b) =>
             {
-                int p = a.Priority.CompareTo(b.Priority); // 3..0
+                int p = a.Priority.CompareTo(b.Priority); 
                 if (p != 0) return p; // higher priority wins
-                return b.CreatedAt.CompareTo(a.CreatedAt); // newer first among equals
+                return b.CreatedAt.CompareTo(a.CreatedAt); 
             }));
 
-        // Category tree (N-ary)
         public readonly BasicTreeNode<string> CategoryTree = BasicTree.BuildCategoryTree();
 
-        // Graph of depots (for traversal/MST)
         public readonly Graph DepotsGraph = new Graph();
 
         private ServiceRequestRepository() { BuildDepotGraph(); }
@@ -50,7 +40,7 @@ namespace MunicipalServicesApp.Services
         {
             if (_all.Count > 0) return;
 
-            // 16 sample requests (SA context)
+            // 16 samples
             var r = new[]
             {
                 SR("SR-2025-0001","Water","Leak","Bellville","Burst pipe near Voortrekker Rd", 3),
@@ -116,7 +106,7 @@ namespace MunicipalServicesApp.Services
 
         private void BuildDepotGraph()
         {
-            // Simple Cape Town region nodes (illustrative distances)
+            // Simple Cape Town region nodes
             int bellville = DepotsGraph.AddVertex("Bellville Depot");
             int athlone = DepotsGraph.AddVertex("Athlone Depot");
             int mitchells = DepotsGraph.AddVertex("Mitchells Plain Depot");
