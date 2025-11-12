@@ -40,6 +40,9 @@ namespace MunicipalServicesApp.Views
         private ToolStripMenuItem toolsMenu;
         private ToolStripMenuItem diagnosticsItem;
 
+        // --- Branding ---
+        private PictureBox picLogo;   // <-- added
+
         // Holds the chosen attachment path (optional).
         private string _attachmentPath;
 
@@ -226,6 +229,36 @@ namespace MunicipalServicesApp.Views
                     // ignore; non-critical
                 }
             };
+
+            // --- Branding: Municipality Logo (top-right) ---
+            picLogo = new PictureBox
+            {
+                // 10px below top edge; 140px from right edge for width 120
+                Location = new Point(this.ClientSize.Width - 140, 8),
+                Size = new Size(120, 40),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                BackColor = Color.Transparent
+            };
+            try
+            {
+                string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "municipality_logo.png");
+                if (File.Exists(logoPath))
+                {
+                    picLogo.Image = Image.FromFile(logoPath);
+                }
+                else
+                {
+                    // Optional fallback visual (keeps layout predictable if file is missing)
+                    picLogo.BackColor = Color.LightGray;
+                }
+            }
+            catch
+            {
+                // Fail gracefully—branding should never block form creation
+            }
+            Controls.Add(picLogo);
+            // --- End branding ---
         }
 
         /// <summary>

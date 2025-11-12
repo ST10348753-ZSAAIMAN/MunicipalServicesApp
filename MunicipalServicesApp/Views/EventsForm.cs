@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;           // <-- added for Path / File
 using System.Linq;
 using System.Windows.Forms;
 using MunicipalServicesApp.Models;
@@ -37,6 +38,9 @@ namespace MunicipalServicesApp.Views
 
         // --- Navigation ---
         private Button btnBack;
+
+        // --- Branding ---
+        private PictureBox picLogo;     // <-- added
 
         // Sorting state (default = Date ascending)
         private int _sortColumn = 2;   // Date column index
@@ -125,6 +129,35 @@ namespace MunicipalServicesApp.Views
                 lblSearch, txtSearch, lblCategory, cmbCategory, lblFrom, dtpFrom, lblTo, dtpTo, btnSearch,
                 lvEvents, grpRecommendations, btnBack
             });
+
+            // --- Branding: Municipality Logo (top-right) ---
+            picLogo = new PictureBox
+            {
+                Location = new Point(this.ClientSize.Width - 140, 10),
+                Size = new Size(120, 40),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                BackColor = Color.Transparent
+            };
+            try
+            {
+                string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "municipality_logo.png");
+                if (File.Exists(logoPath))
+                {
+                    picLogo.Image = Image.FromFile(logoPath);
+                }
+                else
+                {
+                    // Optional fallback (keeps layout stable if logo missing)
+                    picLogo.BackColor = Color.LightGray;
+                }
+            }
+            catch
+            {
+                // ignore if image loading fails; branding should never block form creation
+            }
+            Controls.Add(picLogo);
+            // --- End branding ---
         }
 
         /// <summary>

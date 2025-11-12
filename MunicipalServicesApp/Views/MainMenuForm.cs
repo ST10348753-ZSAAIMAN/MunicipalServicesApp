@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace MunicipalServicesApp.Views
@@ -49,16 +50,6 @@ namespace MunicipalServicesApp.Views
                 Location = new Point(40, 20)
             };
 
-            // Optional placeholder logo (you can replace ImageLocation)
-            picLogo = new PictureBox
-            {
-                Size = new Size(60, 60),
-                Location = new Point(380, 10),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.Transparent
-            };
-            // Example: picLogo.ImageLocation = "Resources/municipality_logo.png";
-
             // === Buttons ===
             // Report Issues (ENABLED) — Part 1 feature
             btnReportIssues = new Button
@@ -107,12 +98,45 @@ namespace MunicipalServicesApp.Views
                 }
             };
 
+            // === Branding: Municipality Logo ===
+            picLogo = new PictureBox
+            {
+                Location = new Point(this.ClientSize.Width - 140, 10),
+                Size = new Size(120, 50),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                BackColor = Color.Transparent
+            };
+
+            try
+            {
+                // Loads logo dynamically from Assets folder in your project
+                string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "municipality_logo.png");
+                if (File.Exists(logoPath))
+                {
+                    picLogo.Image = Image.FromFile(logoPath);
+                }
+                else
+                {
+                    // Optional fallback visual cue if logo missing
+                    picLogo.BackColor = Color.LightGray;
+                    using (Graphics g = Graphics.FromImage(new Bitmap(picLogo.Width, picLogo.Height)))
+                    {
+                        g.Clear(Color.LightGray);
+                    }
+                }
+            }
+            catch
+            {
+                // Fail gracefully if image cannot load
+            }
+
             // === Add controls ===
             Controls.Add(lblHeader);
-            Controls.Add(picLogo);
             Controls.Add(btnReportIssues);
             Controls.Add(btnEvents);
             Controls.Add(btnServiceStatus);
+            Controls.Add(picLogo); // add logo last to keep it on top
         }
 
         /// <summary>

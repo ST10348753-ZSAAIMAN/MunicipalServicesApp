@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.IO;                  // <-- Added for Path.Combine
 using System.Linq;
 using System.Windows.Forms;
 using MunicipalServicesApp.Models;
@@ -111,6 +112,27 @@ namespace MunicipalServicesApp.Views
                 lblMst, lvMst, lblMstTotal,
                 btnBack
             });
+
+            // --- Branding: Municipality Logo ---
+            var picLogo = new PictureBox
+            {
+                Location = new Point(this.ClientSize.Width - 140, 10),
+                Size = new Size(120, 40),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            try
+            {
+                picLogo.Image = Image.FromFile(Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Assets", "municipality_logo.png"));
+            }
+            catch
+            {
+                // ignore if missing
+            }
+            Controls.Add(picLogo);
+            // --- End branding ---
         }
 
         private void Wire()
